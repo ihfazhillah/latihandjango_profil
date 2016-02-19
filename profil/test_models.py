@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from .models import UserProfile, UserProfilePhone, UserProfileWebsite
+from .models import UserProfile, Phone, Website
 
 class UserProfileModelTest(TestCase):
 
@@ -31,17 +31,17 @@ class UserProfilePhoneTest(TestCase):
     def setUp(self):
         self.user = UserProfile.objects.create(firstname='first',
                                                lastname='last')
-        self.first_phone = UserProfilePhone.objects.create(user=self.user,
+        self.first_phone = Phone.objects.create(user=self.user,
                                                            nomor='12345',
                                                            tipe = 'p')
     
     def test_retrieve_created_object(self):
-        phone = UserProfilePhone.objects.all()
+        phone = Phone.objects.all()
         self.assertEqual(len(phone), 1)
 
     def test_str_definition_return_alias_with_it_number(self):
         """str method harus mereturn 'nama (nomor)'"""
-        phone = UserProfilePhone.objects.get(id=self.first_phone.id)
+        phone = Phone.objects.get(id=self.first_phone.id)
         self.assertEqual(phone.__str__(), '12345')
 
     def test_if_nomor_not_numeric(self):
@@ -49,31 +49,31 @@ class UserProfilePhoneTest(TestCase):
         kalau field nomor tidak diisi dengan data
         numeric, maka akan muncul validation error
         """
-        phone = UserProfilePhone.objects.create(nomor='ini salah',
+        phone = Phone.objects.create(nomor='ini salah',
                                                 tipe='s',
                                                 user=self.user)
         self.assertRaises(ValidationError,  phone.full_clean)
 
     def test_tipe_must_be_one_in_s_or_p(self):
-        phone = UserProfilePhone.objects.create(nomor='12345',
+        phone = Phone.objects.create(nomor='12345',
                                                 tipe='g',
                                                 user=self.user)
         self.assertRaises(ValidationError, phone.full_clean)
 
 
-class UserProfileWebsiteTest(TestCase):
+class WebsiteTest(TestCase):
 
 
     def setUp(self):
         self.user = UserProfile.objects.create(firstname="first",
                                                lastname="last")
-        self.website_first = UserProfileWebsite.objects.create(
+        self.website_first = Website.objects.create(
                                                                user = self.user,
                                                                tipe='p',
                                                                url = 'http://thisurl.url')
 
     def test_first_website_created(self):
-        web = UserProfileWebsite.objects.all()
+        web = Website.objects.all()
         self.assertEqual(len(web), 1)
 
     
@@ -83,7 +83,7 @@ class UserProfileWebsiteTest(TestCase):
                          'http://thisurl.url')
 
     def test_tipe_must_be_one_in_s_or_p(self):
-        web = UserProfileWebsite.objects.create(url='http://this.url',
+        web = Website.objects.create(url='http://this.url',
                                                 tipe='g',
                                                 user=self.user)
         self.assertRaises(ValidationError, web.full_clean)

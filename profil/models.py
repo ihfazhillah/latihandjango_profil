@@ -1,8 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from .validators import (numeric_validation,
-                         tipe_validator)
+from .validators import (numeric_validation,)
 
 # Create your models here.
 
@@ -18,7 +17,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.firstname
 
-class UserProfilePhone(models.Model):
+class Phone(models.Model):
     user = models.ForeignKey(UserProfile, 
                              related_name='phone')
     nomor = models.CharField(max_length=20,
@@ -30,7 +29,7 @@ class UserProfilePhone(models.Model):
 
 
 
-class UserProfileWebsite(models.Model):
+class Website(models.Model):
     user = models.ForeignKey(UserProfile,
                              related_name='website')
     tipe = models.CharField(choices=TIPE_CHOICE,

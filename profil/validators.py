@@ -7,13 +7,7 @@ def numeric_validation(value):
     string, maka akan mengembalikan validation error
     """
     if not re.match(pattern='[\d+]', string=value):
-        raise ValidationError("'{}' bukan numeric.".format(value))
+        raise ValidationError("'{}' bukan numeric.".format(value), 
+                              code='invalid input')
 
-def tipe_validator(value):
-    """
-    Validasi pilihan tipe, harus antara 'p' yang berarti primary
-    atau 's' yaitu sekunder.
-    """
-    if value not in ('p', 's'):
-        raise ValidationError("{} bukan pilihan tipe yang valid".format(value))
 
