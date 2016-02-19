@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .forms import UserProfileForm, PhoneFormSet
+from .forms import UserProfileForm, PhoneFormSet, WebsiteFormSet
 
 
 class UserProfileFormTest(TestCase):
@@ -89,7 +89,43 @@ class UserProfilePhoneFormSet(TestCase):
         error = form[0]['tipe'].errors.as_data()[0]
         self.assertEqual(error.code, 'required')
 
+class WebsiteFormSetTest(TestCase):
 
 
+    def make_data(self, url, tipe, url2='', tipe2=''):
+         return WebsiteFormSet({
+                            'form-TOTAL_FORMS':2,
+                            'form-INITIAL_FORMS':0,
+                            'form-MAX_NUM_FORMS':'',
+                            'form-0-url': url,
+                            'form-0-tipe': tipe,
+                            'form-1-url': url2,
+                            'form-1-tipe': tipe2,
+                            })
+    def test_valid_data(self):
+        form = self.make_data(url='http://this.url', tipe='p')
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_url(self):
+        """
+        error form is in form[0]
+        """
+        form = self.make_data(url='invalidurl', tipe='p')
+        self.assertFalse(form.is_valid())
+        error = form[0]['url'].errors.as_data()[0]
+        self.assertEqual(error.code, 'invalid')
+    
+    def test_with_invalid_twice(self):
+        """
+        the first url invalid
+        the second form missing tipe 
+        """
+        form = self.make_data(url='invalidurl', tipe='p', 
+                              url2='http://this.valid' , tipe2='')
+        self.assertFalse(form.is_valid())
+        url_first_error = form[0]['url'].errors.as_data()[0]
+        tipe_second_error = form[1]['tipe'].errors.as_data()[0]
+        self.assertEqual(url_first_error.code, 'invalid')
+        self.assertEqual(tipe_second_error.code, 'required')
 
     

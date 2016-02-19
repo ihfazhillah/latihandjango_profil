@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import UserProfile, Phone
+from .models import UserProfile, Phone, Website
 
 
 class UserProfileForm(ModelForm):
@@ -9,3 +9,7 @@ class UserProfileForm(ModelForm):
 
 PhoneFormSet = modelformset_factory(Phone,
                                           exclude=['user'])
+
+WebsiteFormSet = modelformset_factory(
+                                      Website,
+                                      exclude=['user'])
