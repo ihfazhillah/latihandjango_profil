@@ -47,6 +47,19 @@ class VIewTest(TestCase):
         self.second = UserProfile.objects.create(firstname='one',
                                    lastname='two')
 
+        phone = Phone.objects.create(user=self.second,
+                                     nomor='1234',
+                                     tipe='p')
+        website = Website.objects.create(user=self.second,
+                                         url='http://this.url',
+                                         tipe='p')
+        website2 = Website.objects.create(user=self.first,
+                               url='http://how.url',
+                               tipe='p')
+        phone2 = Phone.objects.create(user=self.first,
+                                     nomor='1234',
+                                     tipe='p')
+
 ###
 # testing index view
 ###
@@ -133,7 +146,7 @@ class VIewTest(TestCase):
         profil = UserProfile.objects.all()
         phone = Phone.objects.all()
         self.assertEqual(len(profil), 3)
-        self.assertEqual(len(phone), 1)
+        self.assertEqual(len(phone), 3)
         self.assertRedirects(response, reverse('profil:index'))
 
     def test_create_profil_with_post_and__profile_phone_and_web(self):
@@ -150,8 +163,8 @@ class VIewTest(TestCase):
         phone = Phone.objects.all()
         web = Website.objects.all()
         self.assertEqual(len(profil), 3)
-        self.assertEqual(len(phone), 1)
-        self.assertEqual(len(web), 1)
+        self.assertEqual(len(phone), 3)
+        self.assertEqual(len(web), 3)
         self.assertRedirects(response, reverse('profil:index'))
 
     def test_create_profil_with_post_and_profile_phone_and_web_with_invalid(self):
@@ -175,8 +188,8 @@ class VIewTest(TestCase):
         phone = Phone.objects.all()
         web = Website.objects.all()
         self.assertEqual(len(profil), 2)
-        self.assertEqual(len(phone), 0)
-        self.assertEqual(len(web), 0)
+        self.assertEqual(len(phone), 2)
+        self.assertEqual(len(web), 2)
 
 ###
 # Testing edit view
@@ -223,16 +236,7 @@ class VIewTest(TestCase):
         sama userprofile pertama, dan menampilkan initial data yang 
         benar disetiap formsetnya
         """
-        phone = Phone.objects.create(user=self.first,
-                                     nomor='1234',
-                                     tipe='p')
-        website = Website.objects.create(user=self.first,
-                                         url='http://this.url',
-                                         tipe='p')
-        Website.objects.create(user=self.second,
-                               url='http://how.url',
-                               tipe='p')
-        self.login()
+      
         response = self.client.get(reverse('profil:edit', args=[1]))
         self.assertEqual(response.context['userform']['firstname'].value(), 
                          'first')
@@ -255,15 +259,7 @@ class VIewTest(TestCase):
         sama userprofile pertama, dan menampilkan initial data yang 
         benar disetiap formsetnya
         """
-        phone = Phone.objects.create(user=self.second,
-                                     nomor='1234',
-                                     tipe='p')
-        website = Website.objects.create(user=self.second,
-                                         url='http://this.url',
-                                         tipe='p')
-        Website.objects.create(user=self.first,
-                               url='http://how.url',
-                               tipe='p')
+        
         self.login()
         response = self.client.get(reverse('profil:edit', args=[2]))
         self.assertEqual(response.context['userform']['firstname'].value(), 
@@ -280,3 +276,61 @@ class VIewTest(TestCase):
                          'http://this.url')
         self.assertEqual(response.context['webform'][1]['url'].value(),
                          None)
+
+    def test_edit_detail_profile_1_with_valid_data(self):
+        data = self.make_data(firstname='ihfazh', lastname='amin', 
+                              phone_nomor='112', phone_tipe='s', 
+                              phone_nomor2='1234', phone_tipe2='p', 
+                              web_url='http://iki.aku', web_tipe='s', 
+                              web_url2='http://itu.kamu', web_tipe2='p')
+        self.login()
+
+        response = self.client.post(reverse('profil:edit', args=[1]),
+                                    data=data)
+        self.assertRedirects(response, reverse('profil:detail', args=[1]))
+    
+    def test_editing_detail_profile_1_firstname_lastname(self):
+        data = self.make_data(firstname='ihfazh', lastname='amin', 
+                              phone_nomor='112', phone_tipe='s', 
+                              phone_nomor2='1234', phone_tipe2='p', 
+                              web_url='http://iki.aku', web_tipe='s', 
+                              web_url2='http://itu.kamu', web_tipe2='p')
+        self.login()
+
+        response = self.client.post(reverse('profil:edit', args=[1]),
+                                    data=data)
+        userprofile = UserProfile.objects.get(pk=1)
+        self.assertEqual(userprofile.firstname, 'ihfazh')
+        self.assertEqual(userprofile.lastname, 'amin')
+
+    def test_editing_detail_profile_1_phone(self):
+        data = self.make_data(firstname='ihfazh', lastname='amin', 
+                              phone_nomor='112', phone_tipe='s', 
+                              phone_nomor2='1234', phone_tipe2='p', 
+                              web_url='http://iki.aku', web_tipe='s', 
+                              web_url2='http://itu.kamu', web_tipe2='p')
+        self.login()
+
+        response = self.client.post(reverse('profil:edit', args=[1]),
+                                    data=data)
+        userprofile = UserProfile.objects.get(pk=1)
+        self.assertEqual(len(userprofile.phone.all()), 2)
+        phone1 = userprofile.phone.first()
+        self.assertEqual(phone1.nomor, '112')
+        phone2 = userprofile.phone.last()
+        self.assertEqual(phone2.nomor, '1234')
+
+    def test_editing_detail_profile_1_web(self):
+        data = self.make_data(firstname='ihfazh', lastname='amin', 
+                              phone_nomor='112', phone_tipe='s', 
+                              phone_nomor2='1234', phone_tipe2='p', 
+                              web_url='http://iki.aku', web_tipe='s', 
+                              web_url2='http://itu.kamu', web_tipe2='p')
+        self.login()
+
+        response = self.client.post(reverse('profil:edit', args=[1]),
+                                    data=data)
+        userprofile = UserProfile.objects.get(pk=1)
+        self.assertEqual(len(userprofile.website.all()), 2)
+        web1 = userprofile.website.first()
+        self.assertEqual(web1.url, 'http://iki.aku')

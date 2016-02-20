@@ -23,7 +23,7 @@ def detail(request, pk):
 def create(request):
     
     if not request.user.is_authenticated():
-      return HttpResponseForbidden("Anda tidak diperkenankan masuk")
+        return HttpResponseForbidden("Anda tidak diperkenankan masuk")
 
     if request.method == "POST":
         profile_form = UserProfileForm(request.POST)
@@ -58,19 +58,53 @@ def create(request):
     return render(request, 'profil/create.html', context)
 
 def edit(request, pk):
-  userprofile = get_object_or_404(UserProfile, pk=pk)
+    userprofile = get_object_or_404(UserProfile, pk=pk)
 
-  if not request.user.is_authenticated():
-    return HttpResponseForbidden("Kamu tidak diperkenankan")
+    if not request.user.is_authenticated():
+        return HttpResponseForbidden("Kamu tidak diperkenankan")
 
-  userform = UserProfileForm(initial=userprofile.__dict__)
-  phoneform = PhoneFormSet(queryset=userprofile.phone.all())
-  webform = WebsiteFormSet(queryset=userprofile.website.all())
-  
-  context = {'userform':userform,
+    if request.method == 'POST':
+        userform = UserProfileForm(initial=userprofile.__dict__, 
+                                   data=request.POST, instance=userprofile)
+        phoneform = PhoneFormSet(queryset=userprofile.phone.all(),
+                                 data=request.POST, prefix='phone')
+        webform = WebsiteFormSet(queryset=userprofile.website.all(),
+                                 data=request.POST, prefix='web')
+
+        if userform.is_valid() and phoneform.is_valid() and webform.is_valid():
+            userform.save()
+            phone = phoneform.save(commit=False)
+            web = webform.save(commit=False)
+
+            for p in userprofile.phone.all():
+                p.delete()
+
+            for p in phone :
+                p.user = userprofile
+                p.save()
+
+            for w in userprofile.website.all():
+                w.delete()
+
+            for w in web:
+                w.user = userprofile
+                w.save()
+
+
+
+
+        return redirect(reverse('profil:detail', args=[userprofile.pk]))
+
+    userform = UserProfileForm(initial=userprofile.__dict__)
+    phoneform = PhoneFormSet(queryset=userprofile.phone.all(),
+                             prefix='phone')
+    webform = WebsiteFormSet(queryset=userprofile.website.all(),
+                             prefix='web')
+
+    context = {'userform':userform,
                     'phoneform': phoneform,
                     'webform': webform }
 
-  return render(request, 'profil/edit.html',
+    return render(request, 'profil/edit.html',
                 context)
 
