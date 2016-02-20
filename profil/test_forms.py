@@ -89,6 +89,20 @@ class UserProfilePhoneFormSet(TestCase):
         error = form[0]['tipe'].errors.as_data()[0]
         self.assertEqual(error.code, 'required')
 
+    def test_with_same_input(self):
+        """
+        Formset tidakboleh double data nomornya
+        Ini menggunakan validasi via BaseModelFormSet,
+        maka tidak bisa menggunakan errors properti secara langsung
+        harus dengan form.non_form_errors barus bisa dapat pesan 
+        error. Tapi, valid == False
+        TODO: Pindahkan validasi sebisa mungkin ke models.py
+        """
+        form = self.form_data(nomor='12345', tipe='p', 
+                              nomor2='12345', tipe2='s')
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.non_form_errors().as_data()[0].code, 'duplikat')
+
 class WebsiteFormSetTest(TestCase):
 
 
@@ -127,5 +141,19 @@ class WebsiteFormSetTest(TestCase):
         tipe_second_error = form[1]['tipe'].errors.as_data()[0]
         self.assertEqual(url_first_error.code, 'invalid')
         self.assertEqual(tipe_second_error.code, 'required')
+
+    def test_with_same_input(self):
+        """
+        Formset tidakboleh double data nomornya
+        Ini menggunakan validasi via BaseModelFormSet,
+        maka tidak bisa menggunakan errors properti secara langsung
+        harus dengan form.non_form_errors barus bisa dapat pesan 
+        error. Tapi, valid == False
+        TODO: Pindahkan validasi sebisa mungkin ke models.py
+        """
+        form = self.make_data(url='http://url.jy', tipe='p', 
+                              url2='http://url.jy', tipe2='s')
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.non_form_errors().as_data()[0].code, 'duplikat')
 
     
