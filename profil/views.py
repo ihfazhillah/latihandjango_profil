@@ -56,3 +56,21 @@ def create(request):
                        'website_form': website_form}
 
     return render(request, 'profil/create.html', context)
+
+def edit(request, pk):
+  userprofile = get_object_or_404(UserProfile, pk=pk)
+
+  if not request.user.is_authenticated():
+    return HttpResponseForbidden("Kamu tidak diperkenankan")
+
+  userform = UserProfileForm(initial=userprofile.__dict__)
+  phoneform = PhoneFormSet(queryset=userprofile.phone.all())
+  webform = WebsiteFormSet(queryset=userprofile.website.all())
+  
+  context = {'userform':userform,
+                    'phoneform': phoneform,
+                    'webform': webform }
+
+  return render(request, 'profil/edit.html',
+                context)
+

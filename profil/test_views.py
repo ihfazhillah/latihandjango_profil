@@ -42,9 +42,9 @@ class VIewTest(TestCase):
                                     email='',
                                     password='ihfazhillah')
 
-        UserProfile.objects.create(firstname='first',
+        self.first = UserProfile.objects.create(firstname='first',
                                    lastname='last')
-        UserProfile.objects.create(firstname='one',
+        self.second = UserProfile.objects.create(firstname='one',
                                    lastname='two')
 
 ###
@@ -177,3 +177,106 @@ class VIewTest(TestCase):
         self.assertEqual(len(profil), 2)
         self.assertEqual(len(phone), 0)
         self.assertEqual(len(web), 0)
+
+###
+# Testing edit view
+###
+
+    def test_return_403_with_anonymous_user(self):
+        response = self.client.get(reverse('profil:edit', args=[1]))
+        self.assertEqual(response.status_code, 403)
+
+    def test_return_200_with_authenticated_user(self):
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[1]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_if_user_not_found_got_404_not_found(self):
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[10]))
+        self.assertEqual(response.status_code, 404)
+
+    def test_using_right_template(self):
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[1]))
+        self.assertTemplateUsed(response, 'profil/edit.html')
+
+    def test_context_1_contains_userform_with_initial(self):
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[1]))
+        self.assertEqual(response.context['userform']['firstname'].value(), 
+                         'first')
+        self.assertEqual(response.context['userform']['lastname'].value(),
+                         'last')
+
+    def test_context_2_contains_userform_with_initial(self):
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[2]))
+        self.assertEqual(response.context['userform']['firstname'].value(), 
+                         'one')
+        self.assertEqual(response.context['userform']['lastname'].value(),
+                         'two')
+
+    def test_context_1_contains_correct_forms(self):
+        """
+        Di test ini akan membuat objek yang punya relasi
+        sama userprofile pertama, dan menampilkan initial data yang 
+        benar disetiap formsetnya
+        """
+        phone = Phone.objects.create(user=self.first,
+                                     nomor='1234',
+                                     tipe='p')
+        website = Website.objects.create(user=self.first,
+                                         url='http://this.url',
+                                         tipe='p')
+        Website.objects.create(user=self.second,
+                               url='http://how.url',
+                               tipe='p')
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[1]))
+        self.assertEqual(response.context['userform']['firstname'].value(), 
+                         'first')
+        self.assertEqual(response.context['userform']['lastname'].value(),
+                         'last')
+        # testing phoneformset this initial
+        self.assertEqual(response.context['phoneform'][0]['nomor'].value(),
+                         '1234')
+        self.assertEqual(response.context['phoneform'][1]['nomor'].value(),
+                         None)
+        #testing webform this initial data
+        self.assertEqual(response.context['webform'][0]['url'].value(),
+                         'http://this.url')
+        self.assertEqual(response.context['webform'][1]['url'].value(),
+                         None)
+
+    def test_context_1_contains_correct_forms(self):
+        """
+        Di test ini akan membuat objek yang punya relasi
+        sama userprofile pertama, dan menampilkan initial data yang 
+        benar disetiap formsetnya
+        """
+        phone = Phone.objects.create(user=self.second,
+                                     nomor='1234',
+                                     tipe='p')
+        website = Website.objects.create(user=self.second,
+                                         url='http://this.url',
+                                         tipe='p')
+        Website.objects.create(user=self.first,
+                               url='http://how.url',
+                               tipe='p')
+        self.login()
+        response = self.client.get(reverse('profil:edit', args=[2]))
+        self.assertEqual(response.context['userform']['firstname'].value(), 
+                         'one')
+        self.assertEqual(response.context['userform']['lastname'].value(),
+                         'two')
+        # testing phoneformset this initial
+        self.assertEqual(response.context['phoneform'][0]['nomor'].value(),
+                         '1234')
+        self.assertEqual(response.context['phoneform'][1]['nomor'].value(),
+                         None)
+        #testing webform this initial data
+        self.assertEqual(response.context['webform'][0]['url'].value(),
+                         'http://this.url')
+        self.assertEqual(response.context['webform'][1]['url'].value(),
+                         None)
