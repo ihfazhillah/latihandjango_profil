@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import UserProfile
 from .forms import UserProfileForm, PhoneFormSet, WebsiteFormSet
 
@@ -19,7 +19,12 @@ def detail(request, pk):
                   'profil/detail.html',
                   context)
 
+
 def create(request):
+    
+    if not request.user.is_authenticated():
+      return HttpResponseForbidden("Anda tidak diperkenankan masuk")
+
     if request.method == "POST":
         profile_form = UserProfileForm(request.POST)
         phone_form = PhoneFormSet(request.POST,
