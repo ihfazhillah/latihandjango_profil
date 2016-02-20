@@ -153,3 +153,27 @@ class VIewTest(TestCase):
         self.assertEqual(len(phone), 1)
         self.assertEqual(len(web), 1)
         self.assertRedirects(response, reverse('profil:index'))
+
+    def test_create_profil_with_post_and_profile_phone_and_web_with_invalid(self):
+        """
+        field asalah tidak akan teredirect. Tetap di situ
+        """
+        self.login()
+        data = self.make_data(firstname="first", 
+                              lastname="last",
+                              phone_nomor='ini salah',
+                              phone_nomor2="1234",
+                              phone_tipe='p',
+                              phone_tipe2='s',
+                              web_url='http://my.url',
+                              web_url2='ini salah',
+                              web_tipe2='s',
+                              web_tipe='p')
+        response = self.client.post(reverse('profil:create'), data=data)
+        #get all profile & phone & web
+        profil = UserProfile.objects.all()
+        phone = Phone.objects.all()
+        web = Website.objects.all()
+        self.assertEqual(len(profil), 2)
+        self.assertEqual(len(phone), 0)
+        self.assertEqual(len(web), 0)
