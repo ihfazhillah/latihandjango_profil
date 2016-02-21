@@ -7,4 +7,5 @@ urlpatterns = ( url(r'^$', views.index, name='index'),
                url(r'^create/$', views.create, name='create'),
                url(r'^(?P<pk>\d+)/edit$', views.edit, name='edit'),
                url(r'^login/$', views.login, name='login'),
+               url(r'^logout/$', views.logout, name='logout'),
                )

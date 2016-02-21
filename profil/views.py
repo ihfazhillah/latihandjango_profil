@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import (authenticate, login as auth_login, 
+                                 logout as auth_logout)
 from .models import UserProfile
 from .forms import (UserProfileForm, PhoneFormSet, 
                     WebsiteFormSet, UserLoginForm)
@@ -23,6 +24,10 @@ def login(request):
     login_form = UserLoginForm()
     return render(request, 'profil/login.html',
                   {'login_form': login_form})
+
+def logout(request):
+    auth_logout(request)
+    return redirect(reverse('profil:index'))
 
 def index(request):
     userprofile = UserProfile.objects.all()

@@ -374,3 +374,21 @@ class VIewTest(TestCase):
         response = self.client.get(reverse('profil:index'))
         self.assertNotEqual(response.context['user'].__str__(),
                          'ihfazh')
+
+###
+# Testing logout view
+###
+
+    def test_logout_view(self):
+        # Pastikan, user masih ihfazh setelah login
+        self.login()
+        response = self.client.get(reverse('profil:index'))
+        self.assertEqual(response.context['user'].__str__(),
+                         'ihfazh')
+        #ketika logout, maka redirect ke index
+        response = self.client.get(reverse('profil:logout'))
+        self.assertRedirects(response, reverse('profil:index'))
+        # dan user menjadi anonymous
+        response = self.client.get(reverse('profil:index'))
+        self.assertNotEqual(response.context['user'].__str__(),
+                         'ihfazh')
