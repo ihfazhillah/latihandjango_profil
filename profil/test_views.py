@@ -360,6 +360,11 @@ class VIewTest(TestCase):
                                     data=data)
         # print(help(response.context['user']))
         self.assertRedirects(response, reverse('profil:index'))
+        #pastikan, bahwa user adalah ihfazh, bukan
+        #anonymous
+        response = self.client.get(reverse('profil:index'))
+        self.assertEqual(response.context['user'].__str__(),
+                         'ihfazh')
 
     def test_login_with_invalid_data(self):
         data = {'username':'ihfazh', 'password':''}
