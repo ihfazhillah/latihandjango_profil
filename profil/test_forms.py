@@ -1,5 +1,8 @@
 from django.test import TestCase
-from .forms import UserProfileForm, PhoneFormSet, WebsiteFormSet
+from .forms import (UserProfileForm, 
+                    PhoneFormSet, 
+                    WebsiteFormSet, 
+                    UserLoginForm)
 
 
 class UserProfileFormTest(TestCase):
@@ -156,4 +159,21 @@ class WebsiteFormSetTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.non_form_errors().as_data()[0].code, 'duplikat')
 
-    
+class UserLoginFormTest(TestCase):
+
+        def make_data(self, username, password):
+            return UserLoginForm({'username': username, 
+                                 'password': password})
+
+        def test_valid_data(self):
+            form = self.make_data('ihfazh', 
+                                  'cakepbanget')
+            self.assertTrue(form.is_valid())
+
+        def test_missing_username(self):
+            form = self.make_data('', 'cakepbanget')
+            self.assertFalse(form.is_valid())
+
+        def test_missing_password(self):
+            form = self.make_data('ihfazh', '')
+            self.assertFalse(form.is_valid())

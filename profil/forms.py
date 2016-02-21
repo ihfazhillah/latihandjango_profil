@@ -1,7 +1,9 @@
+from django import forms
 from django.forms import (ModelForm, 
                           modelformset_factory, 
                           BaseModelFormSet,
-                          ValidationError,)
+                          ValidationError,
+                          Form)
 from .models import UserProfile, Phone, Website
 
 
@@ -59,3 +61,9 @@ WebsiteFormSet = modelformset_factory(
                                       Website,
                                       exclude=['user'],
                                       formset=BaseWebsiteFormSet)
+
+class UserLoginForm(Form):
+    username = forms.CharField(max_length=100,
+                               label="User Name")
+    password = forms.CharField(label="Password",
+                               widget=forms.PasswordInput)
