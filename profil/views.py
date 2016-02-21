@@ -1,10 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib.auth import authenticate, login as auth_login
 from .models import UserProfile
-from .forms import UserProfileForm, PhoneFormSet, WebsiteFormSet
+from .forms import (UserProfileForm, PhoneFormSet, 
+                    WebsiteFormSet, UserLoginForm)
 
 # Create your views here.
+def login(request):
+    if request.method == "POST":
+        login_form = UserLoginForm(request.POST)
+        if login_form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, 
+                                password=password)
+            if user is not None:
+                if user.is_active:
+                    auth_login(request, user)
+                    return redirect(reverse('profil:index'))
+
+    login_form = UserLoginForm()
+    return render(request, 'profil/login.html',
+                  {'login_form': login_form})
 
 def index(request):
     userprofile = UserProfile.objects.all()

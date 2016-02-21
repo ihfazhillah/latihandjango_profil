@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from .models import UserProfile, Phone, Website
+from .forms import UserLoginForm
 
 
 class VIewTest(TestCase):
@@ -334,3 +335,34 @@ class VIewTest(TestCase):
         self.assertEqual(len(userprofile.website.all()), 2)
         web1 = userprofile.website.first()
         self.assertEqual(web1.url, 'http://iki.aku')
+
+###
+# testing login view
+###
+    def test_get_login_view_return_found_code(self):
+        response = self.client.get(reverse('profil:login'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_using_right_template(self):
+        response = self.client.get(reverse('profil:login'))
+        self.assertTemplateUsed(response, 'profil/login.html')
+
+    def test_login_view_context_with_login_form(self):
+        response = self.client.get(reverse('profil:login'))
+        self.assertTrue(response.context['login_form'])
+
+    def test_login_view_post_with_valid_data(self):
+        """
+        user sudah di buat di setUp method
+        """
+        data = {'username': 'ihfazh', 'password': 'ihfazhillah'}
+        response = self.client.post(reverse('profil:login'), 
+                                    data=data)
+        # print(help(response.context['user']))
+        self.assertRedirects(response, reverse('profil:index'))
+
+    def test_login_with_invalid_data(self):
+        data = {'username':'ihfazh', 'password':''}
+        response = self.client.post(reverse('profil:login'), 
+                                    data=data)
+        self.assertEqual(response.status_code, 200)
