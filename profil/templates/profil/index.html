@@ -4,9 +4,16 @@
     <title>Profil Index App</title>
 </head>
 <body>
+    <a href="{% url 'profil:login' %}">Login</a>
+    <h1>Profil Index App</h1>
+    <h3>Project Sederhana Tentang Profil</h3>
+    <div id="profil_item">
+        <ul>
+            {% for profile in userprofile %}
+            <li id='item'>{{ profile}}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
 </body>
 </html>
-{% for profile in userprofile %}
-{{ profile}}
-{% endfor %}

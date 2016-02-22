@@ -1,6 +1,7 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 from django.test import LiveServerTestCase
 from django.contrib.auth.models import User 
 from django.core.urlresolvers import reverse
@@ -39,5 +40,31 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         # dan saya dapati bahwa title adalah
         # "Profil Index App"
         self.assertEqual(self.driver.title, "Profil Index App")
+        # Kemudian saya memperhatikan header page, dan
+        # saya dapati juga seperti itu
+        header = self.driver.find_element_by_tag_name("h1")
+        self.assertEqual(header.text, "Profil Index App")
+        # Dan aku juga dapati, ada sub header yang berbunyi
+        # Project Sederhana Tentang Profil
+        sub_header = self.driver.find_element_by_tag_name("h3")
+        self.assertEqual(sub_header.text, "Project Sederhana Tentang Profil")
+        # aku juga dapati, bahwa disana ada link menuju login
+        # dikarenakan aku belum masuk
+        self.assertTrue(self.driver.find_element_by_link_text("Login"))
+        # Dan aku dapati, bahwa disana ada id="profil_item" namun
+        # Kosong.
+        profil_item = self.driver.find_element_by_id("profil_item")
+        ul_li = profil_item.find_elements_by_id("item")
+        self.assertEqual(len(ul_li), 0)
+        
+        ###
+        # Login
+        ###
+        
+        # Kemudian aku ingin mengeklik link login
+        # Dan benar, link menghantarkanku ke halaman login ("profil:login")
+        login_link = self.driver.find_element_by_link_text("Login")
+        login_link.click()
+        self.assertEqual(self.driver.current_url, self.get_abs_url("profil:login"))
         self.fail("Testing belum selesai")
 
