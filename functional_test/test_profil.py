@@ -101,8 +101,14 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         self.assertTrue(all(x.text == "This field is required." for x in errors))
         # Kemudian, saya memasukkan username dan password
         # tapi password yang saya masukkan salah
+        self.enter_username_password(username="ihfazh", 
+                                     password="password_salah")
         # Maka keluar peringatan kesalahan password/email
         # "Password atau Email yang anda masukkan salah"
+        errors = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errors), 1)
+        self.assertTrue(any(x.text == "Password atau Email yang anda masukkan salah"\
+         for x in errors))
         self.fail("Testing belum selesai")
 
 
