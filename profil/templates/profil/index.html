@@ -12,7 +12,7 @@
     <h1>Profil Index App</h1>
     <h3>Project Sederhana Tentang Profil</h3>
     {% if user.is_authenticated %}
-    <p id="add_new_profil"><a href="">Add New Profil</a></p>
+    <p id="add_new_profil"><a href="{% url 'profil:create' %}">Add New Profil</a></p>
     {% endif %}
     <div id="profil_item">
         <ul>

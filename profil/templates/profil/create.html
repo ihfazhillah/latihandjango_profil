@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambahkan Profil Baru</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p id='logged_as'>Logged as {{user}}</p>
+    <p id="logout"><a href="{% url 'profil:logout' %}">Logout</a></p>
+    {% endif %}
+<h3>Tambahkan Profil Baru</h3>
+<form>
+    {{ profile_form.as_p }}
+    {{ phone_form.as_p }}
+    {{ website_form.as_p }}
+</form>
+</body>
+</html>
