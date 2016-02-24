@@ -5,6 +5,9 @@
 </head>
 <body>
 <h3>Masuk Dulu bro</h3>
+{% if errors %}
+<p class="errorlist">{{errors}}</p>
+{% endif %}
 <form action="{% url 'profil:login' %}" method="POST">
     {% csrf_token %}
     {{ login_form.as_p }}

@@ -377,6 +377,12 @@ class VIewTest(TestCase):
         response = self.client.get(reverse('profil:index'))
         self.assertNotEqual(response.context['user'].__str__(),
                          'ihfazh')
+    def test_login_with_invalid_password(self):
+        data = {'username':'ihfazh', 'password': 'ini_password_salah'}
+        response = self.client.post(reverse('profil:login'),
+                                    data=data)
+        self.assertEqual(response.context['errors'], 
+                  'Password atau Email yang anda masukkan salah')
 
 ###
 # Testing logout view

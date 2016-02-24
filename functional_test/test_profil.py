@@ -107,8 +107,10 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         # "Password atau Email yang anda masukkan salah"
         errors = self.driver.find_elements_by_class_name("errorlist")
         self.assertEqual(len(errors), 1)
-        self.assertTrue(any(x.text == "Password atau Email yang anda masukkan salah"\
-         for x in errors))
+        self.assertTrue(any(x.text == \
+                        "Password atau Email yang anda masukkan salah"\
+                        for x in errors))
+        time.sleep(3)
         self.fail("Testing belum selesai")
 
 

@@ -20,6 +20,11 @@ def login(request):
                 if user.is_active:
                     auth_login(request, user)
                     return redirect(reverse('profil:index'))
+            else:
+                error = "Password atau Email yang anda masukkan salah"
+                return render(request,
+                                "profil/login.html",
+                                {'errors':error})
         else:
             return render(request, "profil/login.html",
                           {'login_form': login_form})
