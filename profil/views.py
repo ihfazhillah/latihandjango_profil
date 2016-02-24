@@ -24,7 +24,8 @@ def login(request):
                 error = "Password atau Email yang anda masukkan salah"
                 return render(request,
                                 "profil/login.html",
-                                {'errors':error})
+                                {'errors':error,
+                                'login_form': login_form})
         else:
             return render(request, "profil/login.html",
                           {'login_form': login_form})

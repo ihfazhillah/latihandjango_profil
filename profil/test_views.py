@@ -383,6 +383,10 @@ class VIewTest(TestCase):
                                     data=data)
         self.assertEqual(response.context['errors'], 
                   'Password atau Email yang anda masukkan salah')
+        # Pastikan, bahwa form tetap ada. Dan data masih data
+        # Sebelumnya
+        self.assertEqual(response.context['login_form'].as_p(),
+                         UserLoginForm(data).as_p())
 
 ###
 # Testing logout view

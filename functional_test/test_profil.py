@@ -24,7 +24,9 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
                                 password=""):
         username_ = self.driver.find_element_by_name("username")
         password_ = self.driver.find_element_by_name("password")
+        username_.clear()
         username_.send_keys(username)
+        password_.clear()
         password_.send_keys(password)
         submit = self.driver.find_element_by_name("submit")
         submit.click()
@@ -110,6 +112,8 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         self.assertTrue(any(x.text == \
                         "Password atau Email yang anda masukkan salah"\
                         for x in errors))
+        self.assertTrue(self.driver.find_element_by_name("username"))
+        self.assertTrue(self.driver.find_element_by_name("password"))
         time.sleep(3)
         self.fail("Testing belum selesai")
 
