@@ -19,6 +19,16 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         """
         return "{}{}".format(self.live_server_url, reverse(url_name))
 
+    def enter_username_password(self, 
+                                username="" , 
+                                password=""):
+        username_ = self.driver.find_element_by_name("username")
+        password_ = self.driver.find_element_by_name("password")
+        username_.send_keys(username)
+        password_.send_keys(password)
+        submit = self.driver.find_element_by_name("submit")
+        submit.click()
+
     def setUp(self):
         # Membuat superUser
         User.objects.create_superuser(username='ihfazh',
@@ -74,25 +84,18 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         self.assertEqual(header.text, 'Masuk Dulu bro')
         # aku menemukan disana ada 2 input text, yang satu bertuliskan
         # Username dan yang satunya lagi bertuliskan 
-        username = self.driver.find_element_by_name("username")
         # Password. Namun aku lupa untuk memasukkan data, dan kemudian
-        password = self.driver.find_element_by_name('password')
         # Aku meng-Enter
-        submit = self.driver.find_element_by_name("submit")
-        submit.click()
+        self.enter_username_password()
         # Dan, taraaa... Pesan harus di isi muncul
         errors = self.driver.find_elements_by_class_name("errorlist")
         self.assertEqual(len(errors), 2)
         self.assertTrue(all([x.text == "This field is required." for x in errors]))
         # sadar akan hal itu, 
         # saya mencoba memasukkan username, tapi lupa 
-        username = self.driver.find_element_by_name("username")
         # memasukkan password dan saya mendapatkan pesan yang sama
         # lagi, namun hanya satu.
-        password = self.driver.find_element_by_name("password")
-        username.send_keys("ihfazh")
-        submit = self.driver.find_element_by_name("submit")
-        submit.click()
+        self.enter_username_password(username="ihfazh")
         errors = self.driver.find_elements_by_class_name("errorlist")
         self.assertEqual(len(errors), 1)
         self.assertTrue(all(x.text == "This field is required." for x in errors))
