@@ -114,7 +114,45 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
                         for x in errors))
         self.assertTrue(self.driver.find_element_by_name("username"))
         self.assertTrue(self.driver.find_element_by_name("password"))
-        time.sleep(3)
+        # Ok, sekarang saya harus bersungguh sungguh.
+        # Saya memasukkan data username dan password dengan benar
+        self.enter_username_password(username="ihfazh", 
+                                     password="ihfazhillah")
+        # Dan kemudian aku di redirect ke halaman utama.
+        self.assertEqual(self.driver.current_url, self.get_abs_url('profil:index'))
+        # Disana saya lihat bahwa nama saya tercantum..
+        # Logged as ihfazh
+        logged_as = self.driver.find_element_by_id("logged_as")
+        self.assertEqual(logged_as.text, "Logged as ihfazh")
+        # Dan di sampingnya saya lihat ada link untuk logout
+        logout = self.driver.find_element_by_id("logout")
+        self.assertEqual(logout.text, "Logout")
+        # Dan saya juga lihat, disana terdapat link yang berbunyi
+        # Add New Profil
+        add_new_profil = self.driver.find_element_by_id("add_new_profil")
+        self.assertEqual(add_new_profil.text,
+                         "Add New Profil")
+        # Ok, saya sudah puas sementara.
+        # Sekarang, saya ingin keluar dahulu.
+        # Sehingga link logout aku klik
+        logout.find_element_by_tag_name("a").click()
+        # Dan saya langsung redirect ke index
+        self.assertEqual(self.driver.current_url, 
+                         self.get_abs_url("profil:index"))
+        # Serta session saya sudah terhapus
+        # Sehingga :
+        # Diliuar, saya tidak dapati logged_as
+        self.assertRaises(NoSuchElementException, 
+                         self.driver.find_element_by_id, 
+                         "logged_as")
+        # juga logout link
+        self.assertRaises(NoSuchElementException, 
+                         self.driver.find_element_by_id, 
+                         "logout")
+        # Juga add new profil
+        self.assertRaises(NoSuchElementException, 
+                         self.driver.find_element_by_id, 
+                         "add_new_profil")
         self.fail("Testing belum selesai")
 
 

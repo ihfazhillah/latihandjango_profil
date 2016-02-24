@@ -5,8 +5,15 @@
 </head>
 <body>
     <a href="{% url 'profil:login' %}">Login</a>
+    {% if user.is_authenticated %}
+    <p id='logged_as'>Logged as {{user}}</p>
+    <p id="logout"><a href="{% url 'profil:logout' %}">Logout</a></p>
+    {% endif %}
     <h1>Profil Index App</h1>
     <h3>Project Sederhana Tentang Profil</h3>
+    {% if user.is_authenticated %}
+    <p id="add_new_profil"><a href="">Add New Profil</a></p>
+    {% endif %}
     <div id="profil_item">
         <ul>
             {% for profile in userprofile %}
