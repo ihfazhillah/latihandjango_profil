@@ -5,9 +5,13 @@
 </head>
 <body>
 <h3>Masuk Dulu bro</h3>
-<form>
-    <input name='username' type="text">
-    <input name='password' type='password'>
+<form action="{% url 'profil:login' %}" method="POST">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    
+    <input type='submit' name="submit" value="Login"/>
+    <!-- <input name='username' type="text">
+    <input name='password' type='password'> -->
 </form>
 </body>
 </html>

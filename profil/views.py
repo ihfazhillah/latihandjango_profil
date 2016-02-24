@@ -20,6 +20,9 @@ def login(request):
                 if user.is_active:
                     auth_login(request, user)
                     return redirect(reverse('profil:index'))
+        else:
+            return render(request, "profil/login.html",
+                          {'login_form': login_form})
 
     login_form = UserLoginForm()
     return render(request, 'profil/login.html',

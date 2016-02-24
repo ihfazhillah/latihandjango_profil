@@ -371,6 +371,8 @@ class VIewTest(TestCase):
         response = self.client.post(reverse('profil:login'), 
                                     data=data)
         self.assertEqual(response.status_code, 200)
+        # pastikan mendapatkan error bahwa password is required
+        self.fail(response.context['login_form'])
         response = self.client.get(reverse('profil:index'))
         self.assertNotEqual(response.context['user'].__str__(),
                          'ihfazh')

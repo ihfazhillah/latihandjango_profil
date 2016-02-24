@@ -173,7 +173,11 @@ class UserLoginFormTest(TestCase):
         def test_missing_username(self):
             form = self.make_data('', 'cakepbanget')
             self.assertFalse(form.is_valid())
+            error = form['username'].errors.as_data()[0]
+            self.assertEqual(error.code, 'required')
 
         def test_missing_password(self):
             form = self.make_data('ihfazh', '')
             self.assertFalse(form.is_valid())
+            error = form['password'].errors.as_data()[0]
+            self.assertEqual(error.code, 'required')

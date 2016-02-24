@@ -78,7 +78,9 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         # Password. Namun aku lupa untuk memasukkan data, dan kemudian
         password = self.driver.find_element_by_name('password')
         # Aku meng-Enter
-        password.send_keys(Keys.ENTER)
+        submit = self.driver.find_element_by_name("submit")
+        submit.click()
+        time.sleep(10)
         # Dan, taraaa... Pesan harus di isi muncul
         self.fail("Testing belum selesai")
 
