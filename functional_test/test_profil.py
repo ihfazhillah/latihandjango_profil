@@ -80,7 +80,26 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         # Aku meng-Enter
         submit = self.driver.find_element_by_name("submit")
         submit.click()
-        time.sleep(10)
         # Dan, taraaa... Pesan harus di isi muncul
+        errors = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errors), 2)
+        self.assertTrue(all([x.text == "This field is required." for x in errors]))
+        # sadar akan hal itu, 
+        # saya mencoba memasukkan username, tapi lupa 
+        username = self.driver.find_element_by_name("username")
+        # memasukkan password dan saya mendapatkan pesan yang sama
+        # lagi, namun hanya satu.
+        password = self.driver.find_element_by_name("password")
+        username.send_keys("ihfazh")
+        submit = self.driver.find_element_by_name("submit")
+        submit.click()
+        errors = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errors), 1)
+        self.assertTrue(all(x.text == "This field is required." for x in errors))
+        # Kemudian, saya memasukkan username dan password
+        # tapi password yang saya masukkan salah
+        # Maka keluar peringatan kesalahan password/email
+        # "Password atau Email yang anda masukkan salah"
         self.fail("Testing belum selesai")
+
 
