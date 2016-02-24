@@ -66,5 +66,19 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         login_link = self.driver.find_element_by_link_text("Login")
         login_link.click()
         self.assertEqual(self.driver.current_url, self.get_abs_url("profil:login"))
+        #Untuk benar benar memastikan bahwa ini emang login page
+        # Aku melihat, titlenya bertuilsikan "Login Page"
+        self.assertEqual(self.driver.title, 'Login Page')
+        # dan ada header bertuliskan "Masuk Dulu bro"
+        header = self.driver.find_element_by_tag_name("h3")
+        self.assertEqual(header.text, 'Masuk Dulu bro')
+        # aku menemukan disana ada 2 input text, yang satu bertuliskan
+        # Username dan yang satunya lagi bertuliskan 
+        username = self.driver.find_element_by_name("username")
+        # Password. Namun aku lupa untuk memasukkan data, dan kemudian
+        password = self.driver.find_element_by_name('password')
+        # Aku meng-Enter
+        password.send_keys(Keys.ENTER)
+        # Dan, taraaa... Pesan harus di isi muncul
         self.fail("Testing belum selesai")
 
