@@ -114,17 +114,17 @@ class VIewTest(TestCase):
         response = self.client.get(reverse('profil:create'))
         self.assertTemplateUsed(response, 'profil/create.html')
 
-    def test_create_profil_with_get_is_bound_is_false(self):
+    def test_create_get_return_empty_forms(self):
         """
-        checking empty form is using is_bound property from 
-        gived context
+
         """
         self.login()
         response = self.client.get(reverse('profil:create'))
-        context_is_bound = lambda x : response.context[x].is_bound
-        self.assertFalse(context_is_bound('profile_form'))
-        self.assertFalse(context_is_bound('phone_form'))
-        self.assertFalse(context_is_bound('website_form'))
+        # context_is_bound = lambda x : response.context[x].is_bound
+        # self.assertFalse(context_is_bound('profile_form'))
+        # self.assertFalse(context_is_bound('phone_form'))
+        # self.assertFalse(context_is_bound('website_form'))
+        self.fail(response.context['phone_form'].as_p())
 
     def test_create_profil_with_post_and_just_profile_form(self):
         self.login()

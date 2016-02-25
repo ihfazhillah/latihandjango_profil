@@ -9,10 +9,12 @@
     <p id="logout"><a href="{% url 'profil:logout' %}">Logout</a></p>
     {% endif %}
 <h3>Tambahkan Profil Baru</h3>
-<form>
+<form method="post" action="{% url 'profil:create' %}">
+    {% csrf_token %}
     {{ profile_form.as_p }}
     {{ phone_form.as_p }}
     {{ website_form.as_p }}
+    <input type="submit" name="save" value="Save"/>
 </form>
 </body>
 </html>
