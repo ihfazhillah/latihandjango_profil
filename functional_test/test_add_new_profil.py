@@ -148,7 +148,6 @@ class AddNewProfil(FunctionalTestingProfilApp):
         phone_0_tipe.send_keys("s")
         web_0_tipe.send_keys("p")
         web_0_url.send_keys("http://url.sakkuun")
-        time.sleep(3)
         save.click()
         self.assertEqual(self.driver.current_url,
                          self.get_abs_url("profil:index"))

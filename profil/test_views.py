@@ -116,28 +116,25 @@ class VIewTest(TestCase):
 
     def test_create_get_return_empty_forms(self):
         """
-
+        this test return None value.
         """
         self.login()
         response = self.client.get(reverse('profil:create'))
-        # context_is_bound = lambda x : response.context[x].is_bound
-        # self.assertFalse(context_is_bound('profile_form'))
-        # self.assertFalse(context_is_bound('phone_form'))
-        # self.assertFalse(context_is_bound('website_form'))
-        # from .forms import UserProfileForm
-        # self.fail(UserProfileForm()['firstname'])
+        self.assertEqual(len(
+                         response.context['phone_form']),
+                        1)
         self.assertEqual(
                          response.context['phone_form'][0]['nomor'].value(),
-                         "")
+                         None)
         self.assertEqual(
                          response.context['phone_form'][0]['tipe'].value(),
-                         "")
+                         None)
         self.assertEqual(
                          response.context['website_form'][0]['url'].value(),
-                         "")
+                         None)
         self.assertEqual(
                          response.context['website_form'][0]['tipe'].value(),
-                         "")
+                         None)
 
     def test_create_profil_with_post_and_just_profile_form(self):
         self.login()

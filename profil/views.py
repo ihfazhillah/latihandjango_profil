@@ -81,8 +81,10 @@ def create(request):
 
 
     profile_form = UserProfileForm()
-    phone_form = PhoneFormSet(prefix='phone',)
-    website_form = WebsiteFormSet(prefix='web')
+    phone_form = PhoneFormSet(prefix='phone',
+                              queryset=Phone.objects.none())
+    website_form = WebsiteFormSet(prefix='web',
+                                  queryset=Website.objects.none())
     context = {'profile_form': profile_form,
                        'phone_form': phone_form,
                        'website_form': website_form}
