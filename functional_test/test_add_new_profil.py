@@ -37,7 +37,7 @@ class AddNewProfil(FunctionalTestingProfilApp):
                                                               "a").get_attribute(
                                                               'href'),
                          self.get_abs_url("profil:logout"))
-        
+
         ##########
         #testing input with valid data
         # So, aku ingin mengisi firstname dan lastname saja
@@ -86,6 +86,49 @@ class AddNewProfil(FunctionalTestingProfilApp):
 ###
 #Testing invalid input
 ###
+        
+        ### Empty Data
+        self.fill_create_profil()
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 2)
+        self.assertTrue(all(x.text == "This field is required." \
+                        for x in errorlist))
 
+        ### Kosong nomor
+        self.fill_create_profil("ihfazh", "muhammed", tipe_nomor="p")
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 1)
+        self.assertTrue(all(x.text == "This field is required." \
+                        for x in errorlist))
+
+        ### Kosong tipe
+        self.fill_create_profil("ihfazh", "muhammed", "12344")
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 1)
+        self.assertTrue(all(x.text == "This field is required." \
+                        for x in errorlist))
+
+        ### Nomor bukan numeric
+        self.fill_create_profil("ihfazh", "muhammed", "tipe_nomor")
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 2)
+        self.assertTrue(any(x.text == "This field is required." \
+                        for x in errorlist))
+        self.assertTrue(any(x.text == "'tipe_nomor' bukan numeric." \
+                        for x in errorlist))
+
+        ### url tanpa tipe
+        self.fill_create_profil("ihfazh", "muhammed", url="http://ini.url")
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 1)
+        self.assertTrue(all(x.text == "This field is required." \
+                        for x in errorlist))
+
+        ## tipe tanpa url
+        self.fill_create_profil("ihfazh", "muhammed", tipe_url="p")
+        errorlist = self.driver.find_elements_by_class_name("errorlist")
+        self.assertEqual(len(errorlist), 1)
+        self.assertTrue(all(x.text == "This field is required." \
+                        for x in errorlist))
 
         self.fail("Testing belum selesai")
