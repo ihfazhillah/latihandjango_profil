@@ -124,7 +124,20 @@ class VIewTest(TestCase):
         # self.assertFalse(context_is_bound('profile_form'))
         # self.assertFalse(context_is_bound('phone_form'))
         # self.assertFalse(context_is_bound('website_form'))
-        self.fail(response.context['phone_form'].as_p())
+        # from .forms import UserProfileForm
+        # self.fail(UserProfileForm()['firstname'])
+        self.assertEqual(
+                         response.context['phone_form'][0]['nomor'].value(),
+                         "")
+        self.assertEqual(
+                         response.context['phone_form'][0]['tipe'].value(),
+                         "")
+        self.assertEqual(
+                         response.context['website_form'][0]['url'].value(),
+                         "")
+        self.assertEqual(
+                         response.context['website_form'][0]['tipe'].value(),
+                         "")
 
     def test_create_profil_with_post_and_just_profile_form(self):
         self.login()
