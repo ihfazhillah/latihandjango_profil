@@ -17,7 +17,7 @@
     <div id="profil_item">
         <ul>
             {% for profile in userprofile %}
-            <li id='item'>{{ profile}}</li>
+            <li id='item'><a href="{% url 'profil:detail' profile.id %}">{{ profile}}</a></li>
             {% endfor %}
         </ul>
     </div>

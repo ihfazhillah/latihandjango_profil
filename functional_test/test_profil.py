@@ -12,12 +12,13 @@ from django.core.urlresolvers import reverse
 class FunctionalTestingProfilApp(LiveServerTestCase):
 
 
-    def get_abs_url(self, url_name):
+    def get_abs_url(self, url_name, args=[]):
         """
         url helper, untuk mendapatkan absolute url 
         menggunakan live server url milik django
         """
-        return "{}{}".format(self.live_server_url, reverse(url_name))
+        url = reverse(url_name, args=args)
+        return "{}{}".format(self.live_server_url, url)
 
     def enter_username_password(self, 
                                 username="" , 

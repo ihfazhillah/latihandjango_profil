@@ -131,4 +131,25 @@ class AddNewProfil(FunctionalTestingProfilApp):
         self.assertTrue(all(x.text == "This field is required." \
                         for x in errorlist))
 
+        # Hmmt.. Oo gitu yah ketika data yang aku masukkan
+        # salah, mesti ada pesan error..
+        # Saatnya mengecek setiap data yang ada, apakah betul sesuai 
+        # yang kita masukkan...??
+
+        # Masuk ke halaman index
+        self.driver.get(self.get_abs_url("profil:index"))
+        # aku masih lihat, bhw disana ada 3 data
+        profil_item = self.driver.find_element_by_id("profil_item")
+        ul_li = self.driver.find_elements_by_id("item")
+        self.assertEqual(len(ul_li), 3)
+        # saya ingin mengeklik link pertama agar diarahkan ke arah detail
+        ul_li[0].find_element_by_tag_name("a").click()
+        self.assertEqual(self.driver.current_url,
+                         self.get_abs_url("profil:detail", args=[1]))
+        self.assertEqual(self.driver.title, "ihfazh's detail")
+        detail_profil = self.driver.find_element_by_id("detail_profil")
+        firstname = detail_profil.find_element_by_id("firstname")
+        lastname = detail_profil.find_element_by_id("lastname")
+
+
         self.fail("Testing belum selesai")
