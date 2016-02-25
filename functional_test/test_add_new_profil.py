@@ -32,42 +32,18 @@ class AddNewProfil(FunctionalTestingProfilApp):
         self.assertEqual(logged_as.text,
                          "Logged as ihfazh")
         logout = self.driver.find_element_by_id("logout")
-        # print(help(logout))
         self.assertEqual(
-                         self.driver.find_element_by_tag_name("a").get_attribute('href'),
+                         self.driver.find_element_by_tag_name(
+                                                              "a").get_attribute(
+                                                              'href'),
                          self.get_abs_url("profil:logout"))
-        # Aku juga dapati, disitu ada form dengan beberapa input
-
-        # firstname
-        firstname = self.driver.find_element_by_name("firstname")
-        # lastname
-        lastname = self.driver.find_element_by_name("lastname")
-        # phone-0-nomor
-        phone_0_nomor = self.driver.find_element_by_name(
-                                                                "phone-0-nomor")
-        # phone-0-tipe
-        phone_0_tipe = self.driver.find_element_by_name(
-                                                               "phone-0-tipe")
-        # web-0-url
-        web_0_url = self.driver.find_element_by_name(
-                                                            "web-0-url")
-        # web-0-tipe
-        web_0_tipe = self.driver.find_element_by_name(
-                                                            "web-0-tipe") 
-        # dan juga, aku dapati disana ada yang namanya
-        # tombol save
-        save = self.driver.find_element_by_name(
-                                                "save")
-        self.assertEqual(save.get_attribute("type"), "submit")
-
+        
         ##########
         #testing input with valid data
         # So, aku ingin mengisi firstname dan lastname saja
-        firstname.send_keys("ihfazh")
-        lastname.send_keys("muhammad")
-        # Dan itu berhasil. Tidak ada error
-        save.click()
         # Setelah aku save, aku diredirect ke halaman index
+        self.fill_create_profil(firstname_="ihfazh",
+                                lastname_="muhammad")
         self.assertEqual(
                          self.driver.current_url,
                          self.get_abs_url("profil:index"))
@@ -80,32 +56,11 @@ class AddNewProfil(FunctionalTestingProfilApp):
         # Oke, berhasil, sekarang aku ingin membuat profil baru lagi
         # Yaitu dengan firstname , lastname, dan juga phone
         # "maryam", "soleh", "12345", "p"
-        # firstname
-        self.driver.get(self.get_abs_url("profil:create"))
-        firstname = self.driver.find_element_by_name("firstname")
-        # lastname
-        lastname = self.driver.find_element_by_name("lastname")
-        # phone-0-nomor
-        phone_0_nomor = self.driver.find_element_by_name(
-                                                                "phone-0-nomor")
-        # phone-0-tipe
-        phone_0_tipe = self.driver.find_element_by_name(
-                                                               "phone-0-tipe")
-        # web-0-url
-        web_0_url = self.driver.find_element_by_name(
-                                                            "web-0-url")
-        # web-0-tipe
-        web_0_tipe = self.driver.find_element_by_name(
-                                                            "web-0-tipe") 
-        # dan juga, aku dapati disana ada yang namanya
-        # tombol save
-        save = self.driver.find_element_by_name(
-                                                "save")
-        firstname.send_keys("maryam")
-        lastname.send_keys("soleh")
-        phone_0_nomor.send_keys("12345")
-        phone_0_tipe.send_keys("p")
-        save.click()
+        self.fill_create_profil(firstname_= "maryam", 
+                                lastname_= "soleh", 
+                                nomor= "12345",  
+                                tipe_nomor="p", 
+                                url= "" , tipe_url="")
         self.assertEqual(self.driver.current_url,
                          self.get_abs_url("profil:index"))
         profil_item = self.driver.find_element_by_id("profil_item")
@@ -113,42 +68,12 @@ class AddNewProfil(FunctionalTestingProfilApp):
         self.assertEqual(len(ul_li), 2)
         self.assertEqual(ul_li[0].text, "ihfazh")
         self.assertEqual(ul_li[1].text, "maryam")
-
-        # dan aku mau membuat profil yang ke tiga dengan detail
-        # sakkuun , ihfazh, 11111, s, http://url.sakkuun, p
-        self.driver.get(self.get_abs_url("profil:create"))
-        firstname = self.driver.find_element_by_name("firstname")
-        # lastname
-        lastname = self.driver.find_element_by_name("lastname")
-        # phone-0-nomor
-        phone_0_nomor = self.driver.find_element_by_name(
-                                                                "phone-0-nomor")
-        # phone-0-tipe
-        phone_0_tipe = self.driver.find_element_by_name(
-                                                               "phone-0-tipe")
-        # web-0-url
-        web_0_url = self.driver.find_element_by_name(
-                                                            "web-0-url")
-        # web-0-tipe
-        web_0_tipe = self.driver.find_element_by_name(
-                                                            "web-0-tipe") 
-        # dan juga, aku dapati disana ada yang namanya
-        # tombol save
-        save = self.driver.find_element_by_name(
-                                                "save")
-        self.assertRaises(NoSuchElementException,
-                          self.driver.find_element_by_name,
-                          "phone-1-nomor")
-        self.assertRaises(NoSuchElementException,
-                          self.driver.find_element_by_name,
-                          "phone-1-tipe")
-        firstname.send_keys("sakkuun")
-        lastname.send_keys("ihfazh")
-        phone_0_nomor.send_keys("11111")
-        phone_0_tipe.send_keys("s")
-        web_0_tipe.send_keys("p")
-        web_0_url.send_keys("http://url.sakkuun")
-        save.click()
+        #### Ketiga
+        self.fill_create_profil(firstname_="sakkuun", 
+                                lastname_="ihfazh", 
+                                nomor="11111", 
+                                tipe_nomor="s", url="http://url.sakkuun", 
+                                tipe_url="p")
         self.assertEqual(self.driver.current_url,
                          self.get_abs_url("profil:index"))
         profil_item = self.driver.find_element_by_id("profil_item")
@@ -157,5 +82,10 @@ class AddNewProfil(FunctionalTestingProfilApp):
         self.assertEqual(ul_li[0].text, "ihfazh")
         self.assertEqual(ul_li[1].text, "maryam")
         self.assertEqual(ul_li[2].text, "sakkuun")
+
+###
+#Testing invalid input
+###
+
 
         self.fail("Testing belum selesai")

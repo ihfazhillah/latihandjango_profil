@@ -31,6 +31,43 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         submit = self.driver.find_element_by_name("submit")
         submit.click()
 
+    def fill_create_profil(self, firstname_="", lastname_="",
+                           nomor="", tipe_nomor="", 
+                           url="", tipe_url=""):
+        self.driver.get(self.get_abs_url("profil:create"))
+        firstname = self.driver.find_element_by_name("firstname")
+        # lastname
+        lastname = self.driver.find_element_by_name("lastname")
+        # phone-0-nomor
+        phone_0_nomor = self.driver.find_element_by_name(
+                                                                "phone-0-nomor")
+        # phone-0-tipe
+        phone_0_tipe = self.driver.find_element_by_name(
+                                                               "phone-0-tipe")
+        # web-0-url
+        web_0_url = self.driver.find_element_by_name(
+                                                            "web-0-url")
+        # web-0-tipe
+        web_0_tipe = self.driver.find_element_by_name(
+                                                            "web-0-tipe") 
+        # dan juga, aku dapati disana ada yang namanya
+        # tombol save
+        save = self.driver.find_element_by_name(
+                                                "save")
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_name,
+                          "phone-1-nomor")
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_name,
+                          "phone-1-tipe")
+        firstname.send_keys(firstname_)
+        lastname.send_keys(lastname_)
+        phone_0_nomor.send_keys(nomor)
+        phone_0_tipe.send_keys(tipe_nomor)
+        web_0_tipe.send_keys(tipe_url)
+        web_0_url.send_keys(url)
+        save.click()
+        
     def setUp(self):
         # Membuat superUser
         User.objects.create_superuser(username='ihfazh',
@@ -43,6 +80,8 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
         super(FunctionalTestingProfilApp, self).tearDown()
+
+
 
 class ProfilTest(FunctionalTestingProfilApp):
     def test_my_test(self):
@@ -69,6 +108,7 @@ class ProfilTest(FunctionalTestingProfilApp):
         profil_item = self.driver.find_element_by_id("profil_item")
         ul_li = profil_item.find_elements_by_id("item")
         self.assertEqual(len(ul_li), 0)
+
         
 
 
