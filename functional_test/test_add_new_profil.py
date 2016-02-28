@@ -150,6 +150,61 @@ class AddNewProfil(FunctionalTestingProfilApp):
         detail_profil = self.driver.find_element_by_id("detail_profil")
         firstname = detail_profil.find_element_by_id("firstname")
         lastname = detail_profil.find_element_by_id("lastname")
+        self.assertEqual(detail_profil.find_element_by_tag_name("h3").text,
+                         "Detail Profil")
+        self.assertEqual(firstname.text, "Firstname")
+        self.assertEqual(lastname.text, "Lastname")
+        firstname_val = detail_profil.find_element_by_id("f_val")
+        lastname_val = detail_profil.find_element_by_id("l_val")
+        self.assertEqual(firstname_val.text, "ihfazh")
+        self.assertEqual(lastname_val.text, "muhammad")
+        # Cek, bahwa phone number and website tidak ada
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_id,
+                          "detail_phone")
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_id,
+                          "detail_website")
+
+        ## Test data kedua
+        # maryam, soleh, 1234, p
+        
+        # Masuk ke halaman index
+        self.driver.get(self.get_abs_url("profil:index"))
+        # aku masih lihat, bhw disana ada 3 data
+        profil_item = self.driver.find_element_by_id("profil_item")
+        ul_li = self.driver.find_elements_by_id("item")
+        self.assertEqual(len(ul_li), 3)
+        # saya ingin mengeklik link kedua agar diarahkan ke arah detail
+        ul_li[1].find_element_by_tag_name("a").click()
+        self.assertEqual(self.driver.current_url,
+                         self.get_abs_url("profil:detail", args=[2]))
+        self.assertEqual(self.driver.title, "maryam's detail")
+        detail_profil = self.driver.find_element_by_id("detail_profil")
+        firstname = detail_profil.find_element_by_id("firstname")
+        lastname = detail_profil.find_element_by_id("lastname")
+        self.assertEqual(detail_profil.find_element_by_tag_name("h3").text,
+                         "Detail Profil")
+        self.assertEqual(firstname.text, "Firstname")
+        self.assertEqual(lastname.text, "Lastname")
+        firstname_val = detail_profil.find_element_by_id("f_val")
+        lastname_val = detail_profil.find_element_by_id("l_val")
+        self.assertEqual(firstname_val.text, "maryam")
+        self.assertEqual(lastname_val.text, "soleh")
+        # Cek, bahwa website tidak ada
+        
+        detail_nomor = self.driver.find_element_by_id("detail_phone")
+        self.assertEqual(
+                         detail_nomor.find_element_by_tag_name("h3"),
+                         "Detail Nomor")
+        nomor = detail_nomor.find_element_by_id("nomor")
+        self.assertEqual(nomor.text, 'Nomor')
+        tipe = detail_nomor.find_element_by_id("tipe_nomor")
+        self.assertEqual(tipe.text, "Tipe")
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_id,
+                          "detail_website")
+
 
 
         self.fail("Testing belum selesai")
