@@ -178,6 +178,25 @@ class VIewTest(TestCase):
         self.assertEqual(len(web), 3)
         self.assertRedirects(response, reverse('profil:index'))
 
+    def test_create_multiple_data(self):
+        self.login()
+        data_1 = self.make_data(firstname="onet",
+                                lastname="last")
+        self.client.post(reverse('profil:create'), data=data_1)
+        data_2 = self.make_data(firstname="satu",
+                                lastname="dua",
+                                phone_nomor="1234",
+                                phone_tipe="p")
+        self.client.post(reverse('profil:create'), data=data_2)
+        data_3 = self.make_data(firstname="two", 
+                                lastname="one", 
+                                phone_nomor="2345", 
+                                phone_tipe="s",  
+                                web_url="http://hehe.hoho", 
+                                web_tipe="p")
+        self.client.post(reverse("profil:create"), data=data_3)
+        self.fail(UserProfile.objects.all())
+
     def test_create_profil_with_post_and_profile_phone_and_web_with_invalid(self):
         """
         field asalah tidak akan teredirect. Tetap di situ

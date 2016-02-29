@@ -11,12 +11,10 @@
     <p id="lastname">Lastname</p>
     <p id="l_val">{{ userprofile.lastname }}</p>
 </div>
+{% userprofile.phone.all %}
 <div id="detail_phone">
     <h3>Detail Phone</h3>
-    <!-- <p id="firstname">Nomor</p>
-    <p id="f_val">{{ userprofile.nomor.all[0].nomor }}</p>
-    <p id="lastname">Tipe</p>
-    <p id="l_val">{{ userprofile.nomor.all[0].tipe }}</p> -->
 </div>
+{% endif %}
 </body>
 </html>

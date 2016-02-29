@@ -146,6 +146,7 @@ class AddNewProfil(FunctionalTestingProfilApp):
         ul_li[0].find_element_by_tag_name("a").click()
         self.assertEqual(self.driver.current_url,
                          self.get_abs_url("profil:detail", args=[1]))
+        time.sleep(4)
         self.assertEqual(self.driver.title, "ihfazh's detail")
         detail_profil = self.driver.find_element_by_id("detail_profil")
         firstname = detail_profil.find_element_by_id("firstname")
