@@ -1,5 +1,6 @@
 import time
 from selenium.common.exceptions import NoSuchElementException
+
 from .test_profil import FunctionalTestingProfilApp
 
 class AddNewProfil(FunctionalTestingProfilApp):
@@ -184,7 +185,8 @@ class AddNewProfil(FunctionalTestingProfilApp):
         detail_profil = self.driver.find_element_by_id("detail_profil")
         firstname = detail_profil.find_element_by_id("firstname")
         lastname = detail_profil.find_element_by_id("lastname")
-        self.assertEqual(detail_profil.find_element_by_tag_name("h3").text,
+        self.assertEqual(
+                         detail_profil.find_element_by_tag_name("h3").text,
                          "Detail Profil")
         self.assertEqual(firstname.text, "Firstname")
         self.assertEqual(lastname.text, "Lastname")
@@ -192,20 +194,54 @@ class AddNewProfil(FunctionalTestingProfilApp):
         lastname_val = detail_profil.find_element_by_id("l_val")
         self.assertEqual(firstname_val.text, "maryam")
         self.assertEqual(lastname_val.text, "soleh")
-        # Cek, bahwa website tidak ada
         
         detail_nomor = self.driver.find_element_by_id("detail_phone")
         self.assertEqual(
-                         detail_nomor.find_element_by_tag_name("h3"),
-                         "Detail Nomor")
-        nomor = detail_nomor.find_element_by_id("nomor")
-        self.assertEqual(nomor.text, 'Nomor')
-        tipe = detail_nomor.find_element_by_id("tipe_nomor")
-        self.assertEqual(tipe.text, "Tipe")
+                         detail_nomor.find_element_by_tag_name("h3").text,
+                         "Detail Phone")
+        self.assertIn("1234", detail_nomor.text)
+        self.assertIn("primary", detail_nomor.text)
+
+        # Cek, bahwa website tidak ada
         self.assertRaises(NoSuchElementException,
                           self.driver.find_element_by_id,
                           "detail_website")
 
+        ## Test data ketiga
+        
+        
+        # Masuk ke halaman index
+        self.driver.get(self.get_abs_url("profil:index"))
+        # aku masih lihat, bhw disana ada 3 data
+        profil_item = self.driver.find_element_by_id("profil_item")
+        ul_li = self.driver.find_elements_by_id("item")
+        self.assertEqual(len(ul_li), 3)
+        # saya ingin mengeklik link ketiga agar diarahkan ke arah detail
+        ul_li[2].find_element_by_tag_name("a").click()
+        self.assertEqual(self.driver.current_url,
+                         self.get_abs_url("profil:detail", args=[3]))
+        self.assertEqual(self.driver.title, "sakkuun's detail")
+        detail_profil = self.driver.find_element_by_id("detail_profil")
+        firstname = detail_profil.find_element_by_id("firstname")
+        lastname = detail_profil.find_element_by_id("lastname")
+        self.assertEqual(
+                         detail_profil.find_element_by_tag_name("h3").text,
+                         "Detail Profil")
+        self.assertEqual(firstname.text, "Firstname")
+        self.assertEqual(lastname.text, "Lastname")
+        firstname_val = detail_profil.find_element_by_id("f_val")
+        lastname_val = detail_profil.find_element_by_id("l_val")
+        self.assertEqual(firstname_val.text, "sakkuun")
+        self.assertEqual(lastname_val.text, "ihfazh")
+        
+        detail_nomor = self.driver.find_element_by_id("detail_phone")
+        self.assertEqual(
+                         detail_nomor.find_element_by_tag_name("h3").text,
+                         "Detail Phone")
+        self.assertIn("11111", detail_nomor.text)
+        self.assertIn("secondary", detail_nomor.text)
 
+        detail_website = self.driver.find_element_by_id("detail_website")
+        self.assertIn("http://url.sakkuun", detail_website.text)
+        self.assertIn("primary", detail_website.text)
 
-        self.fail("Testing belum selesai")

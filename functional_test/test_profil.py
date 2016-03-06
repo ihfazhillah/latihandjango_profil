@@ -2,13 +2,13 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, override_settings
 from django.contrib.auth.models import User 
 from django.core.urlresolvers import reverse
 
 
 
-
+@override_settings(DEBUG=True)
 class FunctionalTestingProfilApp(LiveServerTestCase):
 
 

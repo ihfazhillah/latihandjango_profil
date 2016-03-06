@@ -11,10 +11,28 @@
     <p id="lastname">Lastname</p>
     <p id="l_val">{{ userprofile.lastname }}</p>
 </div>
-{% userprofile.phone.all %}
+{% if userprofile.phone.all %}
 <div id="detail_phone">
     <h3>Detail Phone</h3>
+    {% for phone in userprofile.phone.all %}
+        <p id="nomor">Nomor</p>
+        <p id="n_val">{{ phone.nomor }}</p>
+        <p id="tipe">Tipe</p>
+        <p id="pt_val">{{ phone.get_tipe_display }}</p>
+    {% endfor %}
 </div>
+{% endif %}
+
+{% if userprofile.website.all %}
+    <div id="detail_website">
+        <h3>Detail Website</h3>
+        {% for web in userprofile.website.all %}
+        <p id="url">Url</p>
+        <p id="u_val">{{ web.url }}</p>
+        <p id="u_tipe">Tipe</p>
+        <p id="ut_val">{{ web.get_tipe_display }}</p>
+        {% endfor %}
+    </div>
 {% endif %}
 </body>
 </html>
