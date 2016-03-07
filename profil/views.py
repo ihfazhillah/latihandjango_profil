@@ -131,7 +131,12 @@ def edit(request, pk):
 
 
 
-        return redirect(reverse('profil:detail', args=[userprofile.pk]))
+            return redirect(reverse('profil:detail', args=[userprofile.pk]))
+        return render(request, "profil/edit.html",
+                      {'userprofile': userprofile, 
+            'userform': userform,
+            'phoneform': phoneform,
+            'webform': webform })
 
     userform = UserProfileForm(initial=userprofile.__dict__)
     phoneform = PhoneFormSet(queryset=userprofile.phone.all(),
@@ -139,9 +144,10 @@ def edit(request, pk):
     webform = WebsiteFormSet(queryset=userprofile.website.all(),
                              prefix='web')
 
-    context = {'userform':userform,
-                    'phoneform': phoneform,
-                    'webform': webform }
+    context = {'userprofile': userprofile, 
+            'userform': userform,
+            'phoneform': phoneform,
+            'webform': webform }
 
     return render(request, 'profil/edit.html',
                 context)
