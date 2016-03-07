@@ -17,7 +17,8 @@
     <div id="profil_item">
         <ul>
             {% for profile in userprofile %}
-            <li id='item'><a href="{% url 'profil:detail' profile.id %}">{{ profile}}</a></li>
+            <li id='item'><a href="{% url 'profil:detail' profile.id %}">{{ profile}}</a>
+            {% if user.is_authenticated%}|<a href="{% url 'profil:edit' profile.id %}">Update</a></li>{% endif %}
             {% endfor %}
         </ul>
     </div>

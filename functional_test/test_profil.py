@@ -68,7 +68,13 @@ class FunctionalTestingProfilApp(LiveServerTestCase):
         web_0_tipe.send_keys(tipe_url)
         web_0_url.send_keys(url)
         save.click()
-        
+
+    def get_index_items(self):
+        self.driver.get(self.get_abs_url("profil:index"))
+        self.driver.find_element_by_id("profil_item")
+        ul_li = self.driver.find_elements_by_id("item")
+        return ul_li
+
     def setUp(self):
         # Membuat superUser
         User.objects.create_superuser(username='ihfazh',

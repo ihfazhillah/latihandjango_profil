@@ -233,7 +233,6 @@ class AddNewProfil(FunctionalTestingProfilApp):
         lastname_val = detail_profil.find_element_by_id("l_val")
         self.assertEqual(firstname_val.text, "sakkuun")
         self.assertEqual(lastname_val.text, "ihfazh")
-        
         detail_nomor = self.driver.find_element_by_id("detail_phone")
         self.assertEqual(
                          detail_nomor.find_element_by_tag_name("h3").text,
@@ -244,4 +243,3 @@ class AddNewProfil(FunctionalTestingProfilApp):
         detail_website = self.driver.find_element_by_id("detail_website")
         self.assertIn("http://url.sakkuun", detail_website.text)
         self.assertIn("primary", detail_website.text)
-
