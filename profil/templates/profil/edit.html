@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update {{userprofile.firstname}}'s profil</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p id='logged_as'>Logged as {{user}}</p>
+    <p id="logout"><a href="{% url 'profil:logout' %}">Logout</a></p>
+    {% endif %}
+<h3>Update {{userprofile.firstname}}'s profil</h3>
+<form method="post" action="{% url 'profil:edit' userprofile.id%}">
+    {% csrf_token %}
+    {{ userform.as_p }}
+    {{ phoneform.as_p }}
+    {{ webform.as_p }}
+    <input type="submit" name="save" value="Save"/>
+</form>
+</body>
+</html>

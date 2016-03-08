@@ -3,6 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from .test_profil import FunctionalTestingProfilApp
 
+
 class AddNewProfil(FunctionalTestingProfilApp):
     def test_add_new_profil(self):
         self.driver.get(self.get_abs_url("profil:index"))
@@ -52,7 +53,7 @@ class AddNewProfil(FunctionalTestingProfilApp):
         profil_item = self.driver.find_element_by_id("profil_item")
         ul_li = profil_item.find_elements_by_id("item")
         self.assertEqual(len(ul_li), 1)
-        self.assertEqual(ul_li[0].text, "ihfazh")
+        self.assertEqual(ul_li[0].text, "ihfazh |Update")
 
         # Oke, berhasil, sekarang aku ingin membuat profil baru lagi
         # Yaitu dengan firstname , lastname, dan juga phone
@@ -67,8 +68,8 @@ class AddNewProfil(FunctionalTestingProfilApp):
         profil_item = self.driver.find_element_by_id("profil_item")
         ul_li = profil_item.find_elements_by_id("item")
         self.assertEqual(len(ul_li), 2)
-        self.assertEqual(ul_li[0].text, "ihfazh")
-        self.assertEqual(ul_li[1].text, "maryam")
+        self.assertEqual(ul_li[0].text, "ihfazh |Update")
+        self.assertEqual(ul_li[1].text, "maryam |Update")
         #### Ketiga
         self.fill_create_profil(firstname_="sakkuun", 
                                 lastname_="ihfazh", 
@@ -80,9 +81,9 @@ class AddNewProfil(FunctionalTestingProfilApp):
         profil_item = self.driver.find_element_by_id("profil_item")
         ul_li = profil_item.find_elements_by_id("item")
         self.assertEqual(len(ul_li), 3)
-        self.assertEqual(ul_li[0].text, "ihfazh")
-        self.assertEqual(ul_li[1].text, "maryam")
-        self.assertEqual(ul_li[2].text, "sakkuun")
+        self.assertEqual(ul_li[0].text, "ihfazh |Update")
+        self.assertEqual(ul_li[1].text, "maryam |Update")
+        self.assertEqual(ul_li[2].text, "sakkuun |Update")
 
 ###
 #Testing invalid input
