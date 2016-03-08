@@ -24,6 +24,7 @@ Seingat saya, hanya :
 - Django == 1.9 
 - Python 3
 - Selenium (`pip install selenium`)
+
 ### TODO
 - [x] Functional Testing
 - [x] Memperbaiki Template, ketika anda menggunakan ini secara langsung, template kosong, bisa anda lihat di templates.
